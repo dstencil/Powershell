@@ -1,19 +1,32 @@
 Import-Module ActiveDirectory
 $allusers = Get-ADUser -Filter *
 $results = @()
+$foldername = "C:\AD_Reports\Groups\"
 
 
+#Test Folder Path and Create if not exists
+if (Test-Path $foldername) {
+    Write-Host "Folder Exists"
+}
+else
+{
+    New-Item $foldername -ItemType Directory
+    Write-Host "Folder Created Successfully"
+}
+#save users into results variable and export to csv
 foreach($user in $allUsers)
 {
 
     $userGroups = Get-ADPrincipalGroupMembership -Identity $user
     foreach($group in $userGroups)
     {
-        $adGroup = Get-ADGroup -Identity $group -Properties Description
-        $results += $adGroup | Select-Object -Property @{name='User';expression={$user.sAMAccountName}},@{name='Enabled';expression={$user.}},Name,Description
+        $adGroup = Get-ADGroup -Identity $group -Properties *
+        $results += $adGroup | Select-Object -Property @{name='User';expression={$user.SamAccountName}},@{name='Enabled';expression={$user.Enabled}}, Name, Description
     }
 }
-$results | Export-Csv -Path 'C:\CSVs\Membership.csv' -NoTypeInformation -Encoding Unicode
+$results | Export-Csv -Path 'C:\AD_Reports\Groups\Membership.csv' -Encoding Unicode
+
+#set up css and convert csv to html for web page table of results
 $css = @"
 
 
@@ -29,8 +42,9 @@ tr:nth-child(odd) { background: #b8d1f3; }
 
 "@
 
-$csvs = get-childitem "C:\CSVs" -filter *.csv -Recurse
-$outputfile = "C:\Temp\adalluser_groups.html"
+$csvs = get-childitem "C:\AD_Reports\Groups" -filter *.csv -Recurse
+$outputfile = "C:\AD_Reports\Groups\adalluser_groups.html"
 foreach($csv in $csvs){
 Import-CSV $csv.FullName | ConvertTo-Html -Head $css -Body "<h1>Filename: $csv</h1>" | Out-File $outputfile -Append
 
+}
