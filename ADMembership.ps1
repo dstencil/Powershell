@@ -10,7 +10,7 @@ foreach($user in $allUsers)
     foreach($group in $userGroups)
     {
         $adGroup = Get-ADGroup -Identity $group -Properties Description
-        $results += $adGroup | Select-Object -Property @{name='User';expression={$user.sAMAccountName}},Name,Description
+        $results += $adGroup | Select-Object -Property @{name='User';expression={$user.sAMAccountName}},@{name='Enabled';expression={$user.}},Name,Description
     }
 }
 $results | Export-Csv -Path 'C:\CSVs\Membership.csv' -NoTypeInformation -Encoding Unicode
