@@ -2,7 +2,8 @@ Import-Module ActiveDirectory
 $allusers = Get-ADUser -Filter *
 $results = @()
 $foldername = "C:\AD_Reports\Groups\"
-
+$csvfile = "Membership.csv"
+$htmlfile = "Membership.html"
 
 #Test Folder Path and Create if not exists
 if (Test-Path $foldername) {
@@ -24,7 +25,7 @@ foreach($user in $allUsers)
         $results += $adGroup | Select-Object -Property @{name='User';expression={$user.SamAccountName}},@{name='Enabled';expression={$user.Enabled}}, Name, Description
     }
 }
-$results | Export-Csv -Path 'C:\AD_Reports\Groups\Membership.csv' -Encoding Unicode
+$results | Export-Csv -Path $foldername+$csvfile -Encoding Unicode
 
 #set up css and convert csv to html for web page table of results
 $css = @"
@@ -42,9 +43,11 @@ tr:nth-child(odd) { background: #b8d1f3; }
 
 "@
 
-$csvs = get-childitem "C:\AD_Reports\Groups" -filter *.csv -Recurse
-$outputfile = "C:\AD_Reports\Groups\adalluser_groups.html"
+$csvs = get-childitem $foldername -filter *.csv -Recurse
+$outputfile = $foldername+$htmlfile
 foreach($csv in $csvs){
 Import-CSV $csv.FullName | ConvertTo-Html -Head $css -Body "<h1>Filename: $csv</h1>" | Out-File $outputfile -Append
 
 }
+
+Invoke-Expression $foldername+$htmlfile
