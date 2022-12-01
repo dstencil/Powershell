@@ -6,8 +6,8 @@ $filename = "Membership"
 $csvext = ".csv"
 $htmlext = ".html"
 $dateString = (Get-Date).ToString("yyyy-MM-dd")
-$csvFile = $foldername + $dateString + "_" + $filename + $csvext
-$htmlFile = $foldername + $dateString + "_" + $filename + $htmlext
+$csvFile = $foldername + $dateString + "_" + $env:USERDNSDomain + "_" + $filename + $csvext
+$htmlFile = $foldername + $dateString + "_" + $env:USERDNSDomain + "_" + $filename + $htmlext
 
 
 
