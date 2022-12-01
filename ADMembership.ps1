@@ -2,12 +2,18 @@ Import-Module ActiveDirectory
 $allusers = Get-ADUser -Filter *
 $results = @()
 $foldername = "C:\AD_Reports\Groups\"
-$csvfile = "Membership.csv"
-$htmlfile = "Membership.html"
+$filename = "Membership"
+$csvext = ".csv"
+$htmlext = ".html"
+$dateString = (Get-Date).ToString("yyyy-MM-dd")
+$csvFile = $foldername + $dateString + "_" + $filename + $csvext
+$htmlFile = $foldername + $dateString + "_" + $filename + $htmlext
+
+
 
 #Test Folder Path and Create if not exists
 if (Test-Path $foldername) {
-    Write-Host "Folder Exists"
+    Write-Host "Folder Exists creating csv file...."
 }
 else
 {
@@ -25,7 +31,8 @@ foreach($user in $allUsers)
         $results += $adGroup | Select-Object -Property @{name='User';expression={$user.SamAccountName}},@{name='Enabled';expression={$user.Enabled}}, Name, Description
     }
 }
-$results | Export-Csv -Path $foldername+$csvfile -Encoding Unicode
+$results | Export-Csv -Path $csvFile -Encoding Unicode
+Write-Host "CSV file created..."
 
 #set up css and convert csv to html for web page table of results
 $css = @"
@@ -44,10 +51,12 @@ tr:nth-child(odd) { background: #b8d1f3; }
 "@
 
 $csvs = get-childitem $foldername -filter *.csv -Recurse
-$outputfile = $foldername+$htmlfile
+$outputfile = $foldername + $dateString + "_" + $filename + $htmlext
+Write-Host "Creating HTML file..."
 foreach($csv in $csvs){
 Import-CSV $csv.FullName | ConvertTo-Html -Head $css -Body "<h1>Filename: $csv</h1>" | Out-File $outputfile -Append
 
 }
-
-Invoke-Expression $foldername+$htmlfile
+Write-Host "Created HTML File..."
+Write-Host "Opening HTML File located at $htmlFile"
+Invoke-Expression $htmlFile
