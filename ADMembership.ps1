@@ -53,10 +53,13 @@ tr:nth-child(odd) { background: #b8d1f3; }
 $csvs = get-childitem $foldername -filter *.csv -Recurse
 $outputfile = $htmlFile
 Write-Host "Creating HTML file..."
+
 foreach($csv in $csvs){
 Import-CSV $csv.FullName | ConvertTo-Html -Head $css -Body "<h1>Filename: $csv</h1>" | Out-File $outputfile -Append
 
 }
 Write-Host "Created HTML File..."
+
 Write-Host "Opening HTML File located at $htmlFile"
 Invoke-Expression $htmlFile
+ Write-Host "test"
