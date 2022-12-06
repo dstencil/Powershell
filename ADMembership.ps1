@@ -62,3 +62,4 @@ Write-Host "Created HTML File..."
 
 Write-Host "Opening HTML File located at $htmlFile"
 Invoke-Expression $htmlFile
+Write-Host "test"
