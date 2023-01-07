@@ -20,4 +20,5 @@ tr:nth-child(odd) { background: #b8d1f3; }
 
 Compare-Object $a $b -property Header1, Header2, etc. | Export-Csv $c
 
+Import-Csv $c | ConvertTo-Html | Out-File $htmlfile
 
