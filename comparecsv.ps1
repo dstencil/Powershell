@@ -1,6 +1,6 @@
 $a = Import-Csv -Path \path\to\file1.csv
 $b = Import-Csv -Path \path\to\file2.csv
-$c = \path\to\outfile.csv
+$csvfile = \path\to\outfile.csv
 $htmlfile = \path\to\outfile.html
 
 $css = @"
@@ -18,7 +18,7 @@ tr:nth-child(odd) { background: #b8d1f3; }
 
 
 
-Compare-Object $a $b -property Header1, Header2, etc. | Export-Csv $c
+Compare-Object $a $b -property Header1, Header2, etc. | Export-Csv $csvfile
 
-Import-Csv $c | ConvertTo-Html - Head -$css -Body "<h1> Difference Report: </h1> <h5> <= removed </h5> <h5> >= added </h5>"| Out-File $htmlfile
+Import-Csv $csvfile | ConvertTo-Html - Head -$css -Body "<h1> Difference Report: </h1> <h5> <= removed </h5> <h5> >= added </h5>"| Out-File $htmlfile
 
