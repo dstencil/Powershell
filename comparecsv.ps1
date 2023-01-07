@@ -20,5 +20,5 @@ tr:nth-child(odd) { background: #b8d1f3; }
 
 Compare-Object $a $b -property Header1, Header2, etc. | Export-Csv $c
 
-Import-Csv $c | ConvertTo-Html - Head -$css -Body "<h1> Difference Report: <= removed >= added </h1>"| Out-File $htmlfile
+Import-Csv $c | ConvertTo-Html - Head -$css -Body "<h1> Difference Report: </h1> <h5> <= removed </h5> <h5> >= added </h5>"| Out-File $htmlfile
 
