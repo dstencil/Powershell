@@ -2,6 +2,27 @@
 $comp= gc "C:\downloads\servers.txt"
 $infoObject=@()
 $results=@()
+$foldername = "C:\AD_Reports\Software\"
+$csvext = ".csv"
+$htmlext = ".html"
+$dateString = (Get-Date).ToString("yyyy-MM-dd")
+$csvFile = $foldername + $dateString + "_" + $env:USERDNSDomain + "_" + $filename + $csvext
+$htmlFile = $foldername + $dateString + "_" + $env:USERDNSDomain + "_" + $filename + $htmlext
+
+
+
+#Test Folder Path and Create if not exists
+if (Test-Path $foldername) {
+    Write-Host "Folder Exists creating csv file...."
+}
+else
+{
+    New-Item $foldername -ItemType Directory
+    Write-Host "Folder Created Successfully"
+}
+
+
+
 foreach($co in $comp)
 {
 $co
@@ -46,6 +67,6 @@ $results+=$infoObject
 
 }
 }
-$results|Export-csv "C:\AD_Reports\Software\result.csv"  -NoTypeInformation
-Import-CSV "C:\AD_Reports\Software\result.csv" | ConvertTo-Html -Head $css  | Out-File "C:\AD_Reports\Software\result.html"
+$results|Export-csv $csvFile  -NoTypeInformation
+Import-CSV $csvFile | ConvertTo-Html -Head $css  | Out-File $htmlFile
 
