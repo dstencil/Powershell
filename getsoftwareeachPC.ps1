@@ -1,7 +1,8 @@
 $comp= gc "C:\Users\user\Downloads\servers.txt"
 $infoObject=@()
 $results=@()
-$foldername = "C:\AD_Reports\Groups\Software\$datestring"
+$csvfoldername = "C:\AD_Reports\Groups\Software\CSV\$datestring"
+$htmlfoldername = "C:\AD_Reports\Groups\Software\HTML\$datestring"
 $csvext = ".csv"
 $htmlext = ".html"
 $dateString = (Get-Date).ToString("yyyy-MM-dd")
@@ -36,8 +37,8 @@ tr:nth-child(odd) { background: #b8d1f3; }
 </style>
 "@
 
-$csvFile = $foldername + $dateString + "_" + $co + $env:USERDNSDomain + "_" + $filename + $csvext
-$htmlFile = $foldername + $dateString + "_" + $co + $env:USERDNSDomain + "_" + $filename + $htmlext
+$csvFile = $csvfoldername + $dateString + "_" + $co + $env:USERDNSDomain + "_" + $filename + $csvext
+$htmlFile = $htmlfoldername + $dateString + "_" + $co + $env:USERDNSDomain + "_" + $filename + $htmlext
 
 $infoObject = New-Object PSObject
 $p=Test-Connection -ComputerName $co -BufferSize 16  -Count 1 -Quiet
