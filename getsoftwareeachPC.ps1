@@ -63,11 +63,10 @@ $p
 if ($p -eq $true)
 {
 
-	$csvproduct=Get-WmiObject -ComputerName $co -ClassName Win32_product 
+    $csvproduct=Get-WmiObject -ComputerName $co -ClassName Win32_product 
     $results += $csvproduct | Select-Object -Property Name,Description,Vendor,Version,HelpLink,HelpTelephone
     $results | Export-Csv -Path $csvfile -Encoding Unicode
-	#$results|Export-csv $csvFile  -NoTypeInformation
-	Import-CSV $csvfile | ConvertTo-Html -Head $css  | Out-File $htmlFile
+    Import-CSV $csvfile | ConvertTo-Html -Head $css -Body "<h1>$co</h1><h1>Software Report<h1><h5>$dateString</h5>" | Out-File $htmlFile
     Write-Host "$co files Created Successfully in $foldername"
 }
 
