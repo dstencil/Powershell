@@ -1,8 +1,10 @@
+
 $comp= gc "C:\Users\user\Downloads\servers.txt"
 $infoObject=@()
 $results=@()
 $csvfoldername = "C:\AD_Reports\Groups\Software\CSV\$datestring"
 $htmlfoldername = "C:\AD_Reports\Groups\Software\HTML\$datestring"
+$foldername = "C:\AD_Reports\Groups\Software"
 $csvext = ".csv"
 $htmlext = ".html"
 $dateString = (Get-Date).ToString("yyyy-MM-dd")
@@ -19,7 +21,22 @@ else
     New-Item $foldername -ItemType Directory
     Write-Host "Folder Created Successfully"
 }
-
+if (Test-Path $csvfoldername) {
+    Write-Host "Folder Exists creating csv file...."
+}
+else
+{
+    New-Item $csvfoldername -ItemType Directory
+    Write-Host "Folder Created Successfully"
+}
+if (Test-Path $htmlfoldername) {
+    Write-Host "Folder Exists creating csv file...."
+}
+else
+{
+    New-Item $htmlfoldername -ItemType Directory
+    Write-Host "Folder Created Successfully"
+}
 
 
 foreach($co in $comp)
@@ -46,9 +63,11 @@ $p
 if ($p -eq $true)
 {
 
-	$csvproduct=Get-WmiObject -ComputerName $co -ClassName Win32_product -Verbose | -Select-Object -Property Name,Description,Vendor,Version,HelpLink,HelpTelephone | Export-csv $csvfile
+	$csvproduct=Get-WmiObject -ComputerName $co -ClassName Win32_product 
+    $results += $csvproduct | Select-Object -Property Name,Description,Vendor,Version,HelpLink,HelpTelephone
+    $results | Export-Csv -Path $csvfile -Encoding Unicode
 	#$results|Export-csv $csvFile  -NoTypeInformation
-	Import-CSV $csvFile | ConvertTo-Html -Head $css  | Out-File $htmlFile
+	Import-CSV $csvfile | ConvertTo-Html -Head $css  | Out-File $htmlFile
     Write-Host "$co files Created Successfully in $foldername"
 }
 
@@ -59,3 +78,4 @@ Write-Host $co + "not found"
 
 }
 }
+
