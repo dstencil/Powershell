@@ -1,6 +1,6 @@
 #Specify $filepath for list of computers
 $filepath = "C:\users\file\to\path
-$file = "filename.csv"
+$file = "sshexample.csv"
 
 #Import list from file above
 $objects = Import-CSV "$filepath\$file"
